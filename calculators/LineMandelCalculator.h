@@ -15,5 +15,7 @@ public:
     int *calculateMandelbrot();
 
 private:
-    // @TODO add all internal parameters
+    int *data;
+    float *real_storage;
+    float *imag_storage;
 };
