@@ -33,12 +33,10 @@ LineMandelCalculator::~LineMandelCalculator() {
     real_storage = NULL;
 }
 
-// TODO Aktualni verze 18.052 GFLOPS
+
 int * LineMandelCalculator::calculateMandelbrot () {
     const int half_height = height / 2;
 
-    // (TODO jeste jednou zkusit vsechny se safelen 64 a bez porovnat)
-    // (TODO zkusit vsechny se simdlen 64 a safelen 128)
     #pragma omp simd simdlen(64) safelen(64)
     for (int i = 0; i <= half_height * width; i++) {
         data[i] = limit;
@@ -49,7 +47,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
 
         const float y = y_start + i * dy; // current imaginary value
 
-        #pragma omp simd simdlen(64) //safelen(64)
+        #pragma omp simd simdlen(64)
         for (int j = 0; j < width; j++) {
             real_storage[j] = x_start + j * dx; // current real value
             imag_storage[j] = y;
@@ -59,7 +57,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
 
         for (int k = 0; k < limit; k++) {
 
-            #pragma omp simd reduction(-: count) simdlen(64) //safelen(64)
+            #pragma omp simd reduction(-: count) simdlen(64) safelen(64)
             for (int j = 0; j < width; j++) {
                 if (data[row_start + j] == limit) {
                     const float r2 = real_storage[j] * real_storage[j];
