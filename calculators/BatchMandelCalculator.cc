@@ -39,7 +39,7 @@ BatchMandelCalculator::~BatchMandelCalculator() {
 
 int * BatchMandelCalculator::calculateMandelbrot () {
     constexpr int block_size = 64;
-    constexpr float block_size_float = (float)block_size;
+    constexpr float block_size_float = static_cast<float>(block_size);
     const int half_height = height / 2;
 
     // Prefill the data array with a limit value.
@@ -54,13 +54,14 @@ int * BatchMandelCalculator::calculateMandelbrot () {
         const int block_i_end = ((block_i_start + block_size) >= half_height) ? half_height + 1 : block_i_start + block_size;
 
         for (int i = block_i_start; i < block_i_end; i++) {
+            // The row index in the data array.
             const int row_start = i * width;
 
-            const float y = y_start + i * dy; // Current imaginary value.
+            const float y = static_cast<float>(y_start + i * dy); // Current imaginary value.
 
             #pragma omp simd simdlen(64)
             for (int j = 0; j < width; j++) {
-                real_storage[j] = x_start + j * dx; // Current real value.
+                real_storage[j] = static_cast<float>(x_start + j * dx); // Current real value.
                 imag_storage[j] = y;
             }
 
@@ -77,7 +78,7 @@ int * BatchMandelCalculator::calculateMandelbrot () {
 
                     #pragma omp simd reduction(-: count) simdlen(64)
                     for (int j = block_j_start; j < block_j_end; j++) {
-                        if (data[row_start + j] == limit) {
+                        if (data[row_start + j] == static_cast<int>(limit)) {
                             const float r2 = real_storage[j] * real_storage[j];
                             const float i2 = imag_storage[j] * imag_storage[j];
 
@@ -86,7 +87,7 @@ int * BatchMandelCalculator::calculateMandelbrot () {
                                 --count;
                             } else {
                                 imag_storage[j] = 2.0f * real_storage[j] * imag_storage[j] + y;
-                                real_storage[j] = r2 - i2 + x_start + j * dx;
+                                real_storage[j] = r2 - i2 + static_cast<const float>(x_start + j * dx);
                             }
                         }
                     }

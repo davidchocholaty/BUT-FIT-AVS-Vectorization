@@ -47,11 +47,11 @@ int * LineMandelCalculator::calculateMandelbrot () {
         // The row index in the data array.
         const int row_start = i * width;
 
-        const float y = y_start + i * dy; // Current imaginary value.
+        const float y = static_cast<float>(y_start + i * dy); // Current imaginary value.
 
         #pragma omp simd simdlen(64)
         for (int j = 0; j < width; j++) {
-            real_storage[j] = x_start + j * dx; // Current real value.
+            real_storage[j] = static_cast<float>(x_start + j * dx); // Current real value.
             imag_storage[j] = y;
         }
 
@@ -63,7 +63,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
 
             #pragma omp simd reduction(-: count) simdlen(64)
             for (int j = 0; j < width; j++) {
-                if (data[row_start + j] == limit) {
+                if (data[row_start + j] == static_cast<int>(limit)) {
                     const float r2 = real_storage[j] * real_storage[j];
                     const float i2 = imag_storage[j] * imag_storage[j];
 
@@ -72,7 +72,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
                         --count;
                     } else {
                         imag_storage[j] = 2.0f * real_storage[j] * imag_storage[j] + y;
-                        real_storage[j] = r2 - i2 + x_start + j * dx;
+                        real_storage[j] = r2 - i2 + static_cast<const float>(x_start + j * dx);
                     }
                 }
             }
