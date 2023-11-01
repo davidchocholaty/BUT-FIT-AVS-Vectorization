@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <!DOCTYPE IntelParallelAdvisorSummaryCollection SYSTEM  "IntelParallelAdvisorSummaryCollection.dtd"> -->
+
+<IntelParallelAdvisorSummary version="" 
+                             kind="DATAKIND_SURVEY_EX" >
+  <hotspot filename="/home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc"
+           line_no="52"
+           routine="BatchMandelCalculator::calculateMandelbrot"
+           is_vectorized="0"
+           self_time="0.000000E+00"
+           total_time="5.499985E-01"
+           trip_counts="64"
+           func_instance="11"
+           priority="0"/>
+  <hotspot filename="/home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc"
+           line_no="56"
+           routine="BatchMandelCalculator::calculateMandelbrot"
+           is_vectorized="0"
+           self_time="0.000000E+00"
+           total_time="5.499985E-01"
+           trip_counts="64"
+           func_instance="10"
+           priority="0"/>
+  <hotspot filename="/home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc"
+           line_no="69"
+           routine="BatchMandelCalculator::calculateMandelbrot"
+           is_vectorized="0"
+           self_time="0.000000E+00"
+           total_time="4.100054E-01"
+           trip_counts="192"
+           func_instance="13"
+           priority="0"/>
+  <hotspot filename="/home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc"
+           line_no="77"
+           routine="BatchMandelCalculator::calculateMandelbrot"
+           is_vectorized="0"
+           self_time="4.100054E-01"
+           total_time="4.100054E-01"
+           trip_counts="22"
+           func_instance="12"
+           priority="0"/>
+  <hotspot filename="/home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc"
+           line_no="106"
+           routine="BatchMandelCalculator::calculateMandelbrot"
+           is_vectorized="1"
+           self_time="1.199969E-01"
+           total_time="1.199969E-01"
+           trip_counts="192"
+           func_instance="25"
+           confidence="1"
+           efficiency="1.250708E+01"
+           referenceEfficiency="1.562500E+00"
+           priority="0"/>
+</IntelParallelAdvisorSummary >

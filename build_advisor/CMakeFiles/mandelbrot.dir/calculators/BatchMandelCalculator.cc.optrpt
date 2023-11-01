@@ -1,0 +1,69 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+
+Begin optimization report for: BatchMandelCalculator::calculateMandelbrot(BatchMandelCalculator *)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(47,5)
+<Peeled loop for vectorization>
+LOOP END
+
+LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(47,5)
+   remark #15301: SIMD LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(47,5)
+<Remainder loop for vectorization>
+   remark #15301: REMAINDER LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(52,37)
+   remark #25460: No loop optimizations reported
+
+   LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(56,9)
+      remark #25460: No loop optimizations reported
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(63,13)
+      <Peeled loop for vectorization>
+      LOOP END
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(63,13)
+         remark #15301: SIMD LOOP WAS VECTORIZED
+      LOOP END
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(63,13)
+      <Remainder loop for vectorization>
+         remark #15301: REMAINDER LOOP WAS VECTORIZED
+      LOOP END
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(69,45)
+         remark #25460: No loop optimizations reported
+
+         LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(77,17)
+            remark #25460: No loop optimizations reported
+
+            LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(80,21)
+               remark #15301: SIMD LOOP WAS VECTORIZED
+            LOOP END
+         LOOP END
+      LOOP END
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(106,13)
+      <Peeled loop for vectorization>
+      LOOP END
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(106,13)
+         remark #15301: SIMD LOOP WAS VECTORIZED
+      LOOP END
+
+      LOOP BEGIN at /home/xchoch09/Documents/BUT-FIT-AVS-Vectorization/calculators/BatchMandelCalculator.cc(106,13)
+      <Remainder loop for vectorization>
+         remark #15301: REMAINDER LOOP WAS VECTORIZED
+      LOOP END
+   LOOP END
+LOOP END
+===========================================================================
