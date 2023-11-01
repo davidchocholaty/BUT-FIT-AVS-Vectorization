@@ -37,22 +37,26 @@ LineMandelCalculator::~LineMandelCalculator() {
 int * LineMandelCalculator::calculateMandelbrot () {
     const int half_height = height / 2;
 
+    // Prefill the data array with a limit value.
     #pragma omp simd simdlen(64) safelen(64)
     for (int i = 0; i <= half_height * width; i++) {
         data[i] = limit;
     }
 
     for (int i = 0; i <= half_height; i++) {
+        // The row index in the data array.
         const int row_start = i * width;
 
-        const float y = y_start + i * dy; // current imaginary value
+        const float y = y_start + i * dy; // Current imaginary value.
 
         #pragma omp simd simdlen(64)
         for (int j = 0; j < width; j++) {
-            real_storage[j] = x_start + j * dx; // current real value
+            real_storage[j] = x_start + j * dx; // Current real value.
             imag_storage[j] = y;
         }
 
+        // Set the count to width. If for all columns the r2 + i2 value is greater than 4.0f, then
+        // the value at the end of the loop (j) will be zero.
         int count = width;
 
         for (int k = 0; k < limit; k++) {
@@ -73,6 +77,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
                 }
             }
 
+            // For all columns the r2 + i2 value is greater than 4.0f, then end the loop.
             if (count == 0) {
                 break;
             }
@@ -80,6 +85,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
 
         const int copy_row_start = (height - i - 1) * width;
 
+        // Copy data to the other symmetrically same row.
         #pragma omp simd simdlen(64) safelen(64)
         for (int j = 0; j < width; j++) {
             data[copy_row_start + j] = data[row_start + j];
