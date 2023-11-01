@@ -57,7 +57,7 @@ int * LineMandelCalculator::calculateMandelbrot () {
 
         for (int k = 0; k < limit; k++) {
 
-            #pragma omp simd reduction(-: count) simdlen(64) safelen(64)
+            #pragma omp simd reduction(-: count) simdlen(64)
             for (int j = 0; j < width; j++) {
                 if (data[row_start + j] == limit) {
                     const float r2 = real_storage[j] * real_storage[j];
