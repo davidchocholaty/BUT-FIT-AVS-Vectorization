@@ -27,25 +27,26 @@
 BatchMandelCalculator::BatchMandelCalculator (unsigned matrixBaseSize, unsigned limit) :
 	BaseMandelCalculator(matrixBaseSize, limit, "BatchMandelCalculator")
 {
-    data  = (int *)(aligned_alloc(64, height * width * sizeof(int)));
-    real_storage = (float *)(aligned_alloc(64, width * sizeof(float)));
-    imag_storage = (float *)(aligned_alloc(64, width * sizeof(float)));
+    data  = (int *)(_mm_malloc(height * width * sizeof(int), 64));
+    real_storage = (float *)(_mm_malloc(width * sizeof(float), 64));
+    imag_storage = (float *)(_mm_malloc(width * sizeof(float), 64));
 }
 
 BatchMandelCalculator::~BatchMandelCalculator() {
-    free(data);
+    _mm_free(data);
     data = NULL;
 
-    free(imag_storage);
+    _mm_free(imag_storage);
     imag_storage = NULL;
 
-    free(real_storage);
+    _mm_free(real_storage);
     real_storage = NULL;
 }
 
 
 int * BatchMandelCalculator::calculateMandelbrot () {
     constexpr int block_size = 64;
+    constexpr float block_size_float = (float)block_size;
     const int half_height = height / 2;
 
     #pragma omp simd simdlen(64)
@@ -61,11 +62,13 @@ int * BatchMandelCalculator::calculateMandelbrot () {
     const int mainGroupYEnd        = std::floor(mainCluterIEnd   * height);*/
     //**********************
 
-    for (int block_i = 0; block_i < std::ceil(((float)half_height) / block_size); block_i++) {
+    // TODO pridat nebo aktualizovat pragmy z line
+    // TODO zkusit aktualni verzi s vypoctem block_i_end a s predchozi verzi block_i_end
+    // TODO zkusit porovnat s blockingem na height a bez blockingu na height
+    for (int block_i = 0; block_i < std::ceil(half_height / block_size_float); block_i++) {
         const int block_i_start = block_i * block_size;
-        const int block_i_end = block_i_start + block_size;
+        const int block_i_end = ((block_i_start + block_size) >= half_height) ? half_height + 1 : block_i_start + block_size;
 
-        // TODO pro posledni
         for (int i = block_i_start; i < block_i_end; i++) {
         //  for (int i = 0; i <= half_height; i++) {
             const int row_start = i * width;
@@ -78,7 +81,7 @@ int * BatchMandelCalculator::calculateMandelbrot () {
                 imag_storage[j] = y;
             }
 
-            for (int block_j = 0; block_j < std::ceil(((float)width) / block_size); block_j++) {
+            for (int block_j = 0; block_j < std::ceil(width / block_size_float); block_j++) {
                 //drop it is in bandelbrot set
                 /*
                 if (block_j >= mainGroupXBlockStart && block_j <= mainGroupXBlockEnd && i >= mainGroupYStart && i <= mainGroupYEnd) {
