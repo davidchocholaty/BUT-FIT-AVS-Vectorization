@@ -3,17 +3,27 @@
 
 1. Byla "Line" vektorizace časově efektivní? Proč?
 ==============================================================================
-Varianta "Line" byla časové více efektivní oproti referenční implementaci (ref). Naopak byla
+Varianta "Line" byla časové více efektivní oproti referenční implementaci ("Ref"). Naopak byla
 méně efektivní oproti variantě "Batch" využívající Cache blocking. Na základě absence bloků
 a iterací přes celý řádek varianta "Line" má mnohem větší výpadky paměti cache.
 
 2. Jaká byla dosažena výkonnost v Intel Advisoru pro jednotlivé implementace 
 (v GFLOPS)?
 ==============================================================================
-Ref: TODO
-Line: 22.127 GFLOPS
-Batch: 30.702 GFLOPS
+Ref:
+-------
+Údaj ze Summary: 2.22 GFLOPS
+Údaj ze Survey & Roofline: 0.629 GFLOPS
 
+Line:
+-------
+Údaj ze Summary: 15.28 GFLOPS
+Údaj ze Survey & Roofline: 22.172 GFLOPS
+
+Batch:
+-------
+Údaj ze Summary: 19.44 GFLOPS
+Údaj ze Survey & Roofline: 30.702 GFLOPS
 
 3. Jaká část kódu byla vektorizována v "Line" implementaci? Vyčteme tuto 
 informaci i u batch kalkulátoru?
@@ -33,3 +43,5 @@ Obě implementace, jak "Line", tak i "Batch", se pohybují svými hodnotami v GF
 propustností L2 cache a L3 cache. Zároveň obě varianty velmi často pracují s pamětmi
 na základě skutečnosti, že bylo nutné přidat uložiště pro hodnoty díky přeskládání smyček.
 Tudíž významná část času se tráví při výpočtu práci s pamětí oproti počítání na procesoru.
+Zároveň se pro obě implementované varianty ("Line" a "Batch") zvýšila aritmetická intenzita
+oproti referenční implementaci ("Ref").
