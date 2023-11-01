@@ -17,13 +17,6 @@
 #include "BatchMandelCalculator.h"
 
 
-// Points of main cluter in mandel
-/*
-#define mainCluterIStart 0.33
-#define mainCluterIEnd   0.67
-#define mainCluterRStart 0.50
-#define mainCluterREnd   0.73*/
-
 BatchMandelCalculator::BatchMandelCalculator (unsigned matrixBaseSize, unsigned limit) :
 	BaseMandelCalculator(matrixBaseSize, limit, "BatchMandelCalculator")
 {
@@ -49,20 +42,11 @@ int * BatchMandelCalculator::calculateMandelbrot () {
     constexpr float block_size_float = (float)block_size;
     const int half_height = height / 2;
 
-    #pragma omp simd simdlen(64)
+    #pragma omp simd simdlen(64) safelen(64)
     for (int i = 0; i <= half_height * width; i++) {
         data[i] = limit;
     }
 
-    //**********************
-    /*
-    const int mainGroupXBlockStart = std::ceil ((float) std::ceil (mainCluterRStart * width) / block_size) + 1;
-    const int mainGroupXBlockEnd   = std::floor((float) std::floor(mainCluterREnd   * width) / block_size) - 1;
-    const int mainGroupYStart      = std::ceil (mainCluterIStart * height);
-    const int mainGroupYEnd        = std::floor(mainCluterIEnd   * height);*/
-    //**********************
-
-    // TODO pridat nebo aktualizovat pragmy z line
     for (int block_i = 0; block_i < std::ceil(half_height / block_size_float); block_i++) {
         const int block_i_start = block_i * block_size;
         const int block_i_end = ((block_i_start + block_size) >= half_height) ? half_height + 1 : block_i_start + block_size;
@@ -79,12 +63,6 @@ int * BatchMandelCalculator::calculateMandelbrot () {
             }
 
             for (int block_j = 0; block_j < std::ceil(width / block_size_float); block_j++) {
-                //drop it is in bandelbrot set
-                /*
-                if (block_j >= mainGroupXBlockStart && block_j <= mainGroupXBlockEnd && i >= mainGroupYStart && i <= mainGroupYEnd) {
-                    continue;
-                }*/
-
                 const int block_j_start = block_j * block_size;
                 const int block_j_end = block_j_start + block_size;
                 int count = block_size;
@@ -115,7 +93,7 @@ int * BatchMandelCalculator::calculateMandelbrot () {
 
             const int copy_row_start = (height - i - 1) * width;
 
-            #pragma omp simd simdlen(64)
+            #pragma omp simd simdlen(64) safelen(64)
             for (int j = 0; j < width; j++) {
                 data[copy_row_start + j] = data[row_start + j];
             }
