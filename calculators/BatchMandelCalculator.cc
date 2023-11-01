@@ -63,14 +63,11 @@ int * BatchMandelCalculator::calculateMandelbrot () {
     //**********************
 
     // TODO pridat nebo aktualizovat pragmy z line
-    // TODO zkusit aktualni verzi s vypoctem block_i_end a s predchozi verzi block_i_end
-    // TODO zkusit porovnat s blockingem na height a bez blockingu na height
     for (int block_i = 0; block_i < std::ceil(half_height / block_size_float); block_i++) {
         const int block_i_start = block_i * block_size;
         const int block_i_end = ((block_i_start + block_size) >= half_height) ? half_height + 1 : block_i_start + block_size;
 
         for (int i = block_i_start; i < block_i_end; i++) {
-        //  for (int i = 0; i <= half_height; i++) {
             const int row_start = i * width;
 
             const float y = y_start + i * dy; // current imaginary value
