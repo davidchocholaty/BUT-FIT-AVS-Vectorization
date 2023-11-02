@@ -5,30 +5,30 @@
 ==============================================================================
 Varianta "Line" je časově efektivnější než referenční implementace ("Ref"),
 protože díky přesunutí smyčky iterující přes sloupce (až do width) za smyčku
-iterující do limitní hodnoty (limit) nevzniká takové množství výpadků paměti
-cache a nedochází tak k častému přepisování jejího obsahu, jako je tomu u
+iterující do limitní hodnoty (limit) nevzniká takové množství výpadků pamětí
+cache a nedochází tak k častému přepisování jejich obsahu, jako je tomu u
 referenční implementace. Zároveň v "Line" implementaci byla použita vektorizace
-pro další urychlení běhu algoritmu.
+pro další urychlení běhu algoritmu pomocí SIMD direktiv OpenMP.
 
 Naopak varianta "Line" je méně efektivní oproti implementaci "Batch"
-využívající Cache blocking. Na základě absence bloků a iterací přes celý řádek
-(až do hodnoty width) má implementace "Line" větší výpadky paměti cache oproti
-"Batch" variantě.
+využívající Cache blocking. Na základě absence práce s menšími bloky dat a
+iteracemi přes celý řádek (až do hodnoty width) má implementace "Line" stále
+větší výpadky pamětí cache oproti "Batch" variantě.
 
 2. Jaká byla dosažena výkonnost v Intel Advisoru pro jednotlivé implementace 
 (v GFLOPS)?
 ==============================================================================
-Ref:
+"Ref":
 -------
 Údaj ze Summary: 2.22 GFLOPS
 Údaj ze Survey & Roofline: 0.629 GFLOPS
 
-Line:
+"Line":
 -------
 Údaj ze Summary: 15.28 GFLOPS
 Údaj ze Survey & Roofline: 22.172 GFLOPS
 
-Batch:
+"Batch":
 -------
 Údaj ze Summary: 19.44 GFLOPS
 Údaj ze Survey & Roofline: 30.702 GFLOPS
@@ -36,18 +36,24 @@ Batch:
 3. Jaká část kódu byla vektorizována v "Line" implementaci? Vyčteme tuto 
 informaci i u batch kalkulátoru?
 ==============================================================================
-U implementace "Line" byla především vektorizována nejvnitřnější smyčka, která
-iteruje přes jednotlivé sloupce až po šířku (width). V implementaci u batch
-kalkulátoru je pro stejnou nejvnitřnější smyčku, která je shodná, využita
-totožná pragma. Dále v obou implementacích je používána vektorizace pro
+U implementace "Line" byla především vektorizována nejvnitřnější smyčka (hlavní
+výpočetní smyčka), která iteruje přes jednotlivé sloupce až do šířky (width).
+V implementaci u batch kalkulátoru je opět pro nejvnitřnější hlavní výpočetní
+smyčku využita totožná pragma. V tomto případě se ovšem pokaždé iteruje pouze
+přes jeden blok řádku. Dále v obou implementacích je používána vektorizace pro
 inicializaci dat a pro vyplnění symetricky totožného řádku dle poloviny výšky
 (height / 2).
 
 4. Co vyčteme z Roofline modelu pro obě vektorizované implementace?
 ==============================================================================
-Obě implementace, jak "Line", tak i "Batch", se pohybují svými hodnotami v GFLOPS mezi
-propustností L2 cache a L3 cache. Zároveň obě varianty velmi často pracují s pamětmi
-na základě skutečnosti, že bylo nutné přidat uložiště pro hodnoty díky přeskládání smyček.
-Tudíž významná část času se tráví při výpočtu prací s pamětí oproti počítání na procesoru.
-Zároveň se pro obě implementované varianty ("Line" i "Batch") zvýšila aritmetická intenzita
-oproti referenční implementaci ("Ref").
+Obě implementace, jak "Line", tak i "Batch", se pohybují svými hodnotami v
+GFLOPS mezi propustností L2 cache a L3 cache, přičemž varianta "Batch" se více
+přiblížila k limitu L2 cache. Zároveň se pro obě implementované varianty
+("Line" i "Batch") zvýšila aritmetická intenzita oproti referenční implementaci
+("Ref").
+
+Současně obě varianty velmi často pracují s pamětí na základě skutečnosti, že
+bylo nutné přidat uložiště pro hodnoty díky přeskládání smyček. Tudíž i přes
+použití vektorizace se velmi významně nezvýšila aritmetická intenzita a stále
+významná část času se tráví při výpočtu prací s pamětí oproti počítání na
+procesoru.
